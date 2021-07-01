@@ -73,7 +73,7 @@
                             <platform>auto</platform>
                             <vmArgs>
                                 <vmArg>-Djava.net.preferIPv4Stack=true</vmArg>
-                                <vmArg>-Dfile.encoding=UTF-8</vmArg>
+                                <vmArg>-Dfile.encoding=GBK</vmArg>
                             </vmArgs>
                         </configuration>
                     </execution>

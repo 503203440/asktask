@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.yx</groupId>
+    <artifactId>asktask</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.5.8</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.projectlombok</groupId>-->
+<!--            <artifactId>lombok</artifactId>-->
+<!--            <version>1.18.8</version>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.14.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.fvarrui</groupId>
+                <artifactId>javapackager</artifactId>
+                <version>1.4.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <configuration>
+                            <!-- mandatory -->
+                            <mainClass>io.yx.asktask.Main</mainClass>
+                            <!-- optional -->
+                            <bundleJre>true</bundleJre>
+                            <!--                            <jrePath>C:\Program Files\Java\jre1.8.0_281</jrePath>-->
+                            <customizedJre>true</customizedJre>
+                            <generateInstaller>false</generateInstaller>
+                            <administratorRequired>false</administratorRequired>
+                            <useResourcesAsWorkingDir>false</useResourcesAsWorkingDir>
+                            <platform>auto</platform>
+                            <vmArgs>
+                                <vmArg>-Djava.net.preferIPv4Stack=true</vmArg>
+                                <vmArg>-Dfile.encoding=UTF-8</vmArg>
+                            </vmArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

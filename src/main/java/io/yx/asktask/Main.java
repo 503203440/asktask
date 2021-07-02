@@ -10,10 +10,16 @@ import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Timer;
 import java.util.*;
 
@@ -30,6 +36,14 @@ public class Main {
     public static AskConfig askConfig;
 
     static {
+
+        // 检测系统是否重复启动
+        boolean look = SingleAppLock.lock("asktask");
+        if (!look) {
+            JOptionPane.showMessageDialog(null, "程序已在运行中,请勿重复运行", "警告", JOptionPane.WARNING_MESSAGE);
+            System.exit(-1);
+        }
+
         try {
             askConfig = askConfig();
         } catch (Exception e) {
@@ -38,11 +52,41 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+
+        // 显示系统图标
+
+        MenuItem menuItem = new MenuItem("退出");
+        menuItem.addActionListener(e -> System.exit(0));
+
+        PopupMenu popupMenu = new PopupMenu();
+        popupMenu.add(menuItem);
+        popupMenu.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+
+
+        TrayIcon trayIcon = new TrayIcon(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/fly.png"))).getImage(), "接口监控运行中");
+        trayIcon.setImageAutoSize(true);
+        trayIcon.setPopupMenu(popupMenu);
+
+        final SystemTray systemTray = SystemTray.getSystemTray();
+        systemTray.add(trayIcon);
+
 
         // 3 启动定时任务线程
         startTask(askConfig);
 
+        String msg = String.format("正在定时轮询%s个URL\n访问间隔%s毫秒\n超时时间%s毫秒\n错误日志文件夹%s",
+                askConfig.getUrl().size(), askConfig.getScanningInterval(), askConfig.getConnectionTimeOut(), askConfig.getLocalFolderError());
+        trayIcon.displayMessage("askTask", msg, TrayIcon.MessageType.INFO);
+        trayIcon.addActionListener(e -> {
+            // 用户点击了消息
+            // 打开文件夹
+            try {
+                Desktop.getDesktop().browse(new URI("file:///" + askConfig.getLocalFolderError().replaceAll("\\\\", "/")));
+            } catch (IOException | URISyntaxException err) {
+                log.error("打开文件夹失败", err);
+            }
+        });
     }
 
     /**

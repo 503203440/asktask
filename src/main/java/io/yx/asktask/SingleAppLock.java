@@ -20,17 +20,15 @@ public class SingleAppLock {
     static RandomAccessFile raf = null;
 
     public static boolean lock(String key) {
-        String tmpdir = System.getProperty("java.io.tmpdir");
-        if (!tmpdir.endsWith(File.separator)) {
-            tmpdir = tmpdir + File.separator;
-        }
-        File file = new File(tmpdir + key + ".lock");
+
+        File file = new File(System.getProperty("java.io.tmpdir") + key + ".lock");
 
         try {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            // 尝试获取文件锁            raf = new RandomAccessFile(file, "rw");
+            // 尝试获取文件锁
+            raf = new RandomAccessFile(file, "rw");
             fileChannel = raf.getChannel();
             fileLock = fileChannel.tryLock();
             if (fileLock != null) {

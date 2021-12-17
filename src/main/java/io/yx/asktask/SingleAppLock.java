@@ -1,7 +1,7 @@
 package io.yx.asktask;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -13,15 +13,19 @@ import java.nio.channels.FileLock;
  */
 public class SingleAppLock {
 
-    private static final Logger log = LoggerFactory.getLogger(SingleAppLock.class);
+    //    private static final Logger log = LoggerFactory.getLogger(SingleAppLock.class);
+    private static final Log log = LogFactory.get();
 
     static FileLock fileLock = null;
     static FileChannel fileChannel = null;
     static RandomAccessFile raf = null;
 
     public static boolean lock(String key) {
-
-        File file = new File(System.getProperty("java.io.tmpdir") + key + ".lock");
+        String tmpdir = System.getProperty("java.io.tmpdir");
+        if (!tmpdir.endsWith(File.separator)) {
+            tmpdir = tmpdir + File.separator;
+        }
+        File file = new File(tmpdir + key + ".lock");
 
         try {
             if (!file.exists()) {

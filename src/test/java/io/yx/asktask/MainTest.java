@@ -15,14 +15,11 @@ public class MainTest {
 
         System.out.println("cache.getIfPresent(key):\t" + cache.getIfPresent(key));
 
-        String result = cache.get(key, (s) -> {
-            return "aaa";
-        });
-
-        System.out.println(result);
+        System.out.println(cache.get(key, (s) -> "aaa"));
 
         System.out.println("cache.getIfPresent(key):\t" + cache.getIfPresent(key));
 
+        System.out.println(cache.get(key, (s) -> "bbb"));
     }
 
 

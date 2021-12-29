@@ -56,6 +56,13 @@
 <!--            <artifactId>slf4j-log4j12</artifactId>-->
 <!--            <version>1.7.30</version>-->
 <!--        </dependency>-->
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -3,6 +3,7 @@ package io.yx.asktask;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -87,6 +88,7 @@ public class Main {
                 log.error("打开文件夹失败", err);
             }
         });
+        log.info("JVM进程ID:{}", RuntimeUtil.getPid());
     }
 
     /**
@@ -199,7 +201,7 @@ public class Main {
             if (status != 200) {
                 String format = String.format("DATETIME：%s,http状态错误HTTP_STATUS:%s,URL:%s,BODY:%s", DateUtil.now(), status, url, body);
 //                String format = String.format("DATETIME：%s,http状态错误HTTP_STATUS:%s,URL:%s", DateUtil.now(), status, url);
-                log(format, DateUtil.format(new Date(), "yyyyMMddHHmmsss"));
+                log(format, DateUtil.format(new Date(), "yyyyMMddHH"));
             }
         } catch (Exception e) {
             String format = String.format("DATETIME：%s,请求失败：%s，URL:%s", DateUtil.now(), e.getMessage(), url);

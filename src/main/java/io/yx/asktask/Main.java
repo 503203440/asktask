@@ -51,6 +51,9 @@ public class Main {
             JOptionPane.showMessageDialog(null, e.getMessage(), "初始化配置文件错误", JOptionPane.ERROR_MESSAGE);
             System.exit(-1);
         }
+
+        // 处理SSLHandshakeException异常
+        System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,SSLv3");
     }
 
     public static void main(String[] args) throws Exception {
@@ -204,6 +207,7 @@ public class Main {
                 log(format, DateUtil.format(new Date(), "yyyyMMddHH"));
             }
         } catch (Exception e) {
+            log.error(e);
             String format = String.format("DATETIME：%s,请求失败：%s，URL:%s", DateUtil.now(), e.getMessage(), url);
             log(format, DateUtil.format(new Date(), "yyyyMMddHH"));
         }

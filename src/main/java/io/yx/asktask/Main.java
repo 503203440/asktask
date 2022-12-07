@@ -3,16 +3,16 @@ package io.yx.asktask;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,6 +35,9 @@ public class Main {
     public static final String userDir = System.getProperty("user.dir");
     public static AskConfig askConfig;
 
+    private static final OkHttpClient okHttpClient = new OkHttpClient();
+
+
     static {
 
         // 检测系统是否重复启动
@@ -50,6 +53,9 @@ public class Main {
             JOptionPane.showMessageDialog(null, e.getMessage(), "初始化配置文件错误", JOptionPane.ERROR_MESSAGE);
             System.exit(-1);
         }
+
+        // 处理SSLHandshakeException异常
+        System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,SSLv3");
     }
 
     public static void main(String[] args) throws Exception {
@@ -87,6 +93,7 @@ public class Main {
                 log.error("打开文件夹失败", err);
             }
         });
+        log.info("JVM进程ID:{}", RuntimeUtil.getPid());
     }
 
     /**
@@ -98,7 +105,7 @@ public class Main {
         if (!configFile.exists()) {
             try (
                     InputStream inputStream = Main.class.getResourceAsStream("/config.conf");
-                    FileOutputStream fos = new FileOutputStream(configFile);
+                    FileOutputStream fos = new FileOutputStream(configFile)
             ) {
 
                 final byte[] bytes = inputStream.readAllBytes();
@@ -165,9 +172,7 @@ public class Main {
 
         // 有多少个url就需要启动多少个线程
         for (String url : urls) {
-            Thread thread = new Thread(() -> {
-                runner(url);
-            });
+            Thread thread = new Thread(() -> runner(url));
             thread.start();
         }
 
@@ -189,19 +194,22 @@ public class Main {
     /**
      * 执行http请求
      *
-     * @return
      */
     public static void execHttp(String url) {
         try {
-            HttpResponse response = HttpRequest.get(url).timeout(askConfig.getConnectionTimeOut()).execute();
-            final int status = response.getStatus();
-            final String body = response.body();
-            if (status != 200) {
-                String format = String.format("DATETIME：%s,http状态错误HTTP_STATUS:%s,URL:%s,BODY:%s", DateUtil.now(), status, url, body);
-//                String format = String.format("DATETIME：%s,http状态错误HTTP_STATUS:%s,URL:%s", DateUtil.now(), status, url);
-                log(format, DateUtil.format(new Date(), "yyyyMMddHHmmsss"));
+            try (Response response = okHttpClient.newCall(new Request.Builder().url(url).build()).execute()) {
+                int status = response.code();
+                String body = response.body().string();
+                if (status != 200) {
+                    String format = String.format("DATETIME：%s,http状态错误HTTP_STATUS:%s,URL:%s,BODY:%s", DateUtil.now(), status, url, body);
+                    log(format, DateUtil.format(new Date(), "yyyyMMddHH"));
+                }
             }
+//            HttpResponse response = HttpRequest.get(url).timeout(askConfig.getConnectionTimeOut()).execute();
+//            final int status = response.getStatus();
+//            final String body = response.body();
         } catch (Exception e) {
+            log.error(e.getMessage());
             String format = String.format("DATETIME：%s,请求失败：%s，URL:%s", DateUtil.now(), e.getMessage(), url);
             log(format, DateUtil.format(new Date(), "yyyyMMddHH"));
         }

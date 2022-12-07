@@ -51,6 +51,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>2.6</version>
+        </dependency>
         <!--        这里不能使用slf4j-log4j2,因为打包的时候java-packager会无法打包,所以改用hutool的Log,此时这个包不能存在类路径下-->
 <!--        <dependency>-->
 <!--            <groupId>org.slf4j</groupId>-->
@@ -83,12 +88,15 @@
                                 <!--如果不加入此模块则会出现Received fatal alert,SSL加解密需要-->
                                 <additionalModule>jdk.crypto.ec</additionalModule>
                             </additionalModules>
+                            <additionalResources>
+                                <additionalResource>${project.basedir}/src/main/resources/asktask.l4j.ini</additionalResource>
+                            </additionalResources>
                             <generateInstaller>false</generateInstaller>
                             <administratorRequired>false</administratorRequired>
                             <platform>auto</platform>
                             <vmArgs>
+                                <!--这里的所有参数都可以放到.l4j.ini文件中,在那里可以定义jvm参数-->
                                 <vmArg>-Djava.net.preferIPv4Stack=true</vmArg>
-                                <vmArg>-Dfile.encoding=UTF-8</vmArg>
                             </vmArgs>
                         </configuration>
                     </execution>

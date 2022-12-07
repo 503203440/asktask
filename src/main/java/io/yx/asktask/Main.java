@@ -7,6 +7,7 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.formdev.flatlaf.FlatLightLaf;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -39,6 +40,7 @@ public class Main {
 
 
     static {
+        FlatLightLaf.setup();
 
         // 检测系统是否重复启动
         boolean look = SingleAppLock.lock("asktask");

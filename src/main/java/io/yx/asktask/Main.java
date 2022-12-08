@@ -5,6 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.cron.CronUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -96,6 +97,13 @@ public class Main {
             }
         });
         log.info("JVM进程ID:{}", RuntimeUtil.getPid());
+
+        // 启动定时检查更新的任务
+        CronUtil.setMatchSecond(true);
+        // 每小时检查一次更新
+        CronUtil.schedule("0 * * * *", (Runnable) CheckUpdateTask::checkUpdate);
+        CronUtil.start(true);
+
     }
 
     /**

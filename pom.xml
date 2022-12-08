@@ -93,7 +93,7 @@
                             </additionalResources>
                             <generateInstaller>false</generateInstaller>
                             <administratorRequired>false</administratorRequired>
-                            <platform>auto</platform>
+                            <platform>windows</platform>
                             <vmArgs>
                                 <!--这里的所有参数都可以放到.l4j.ini文件中,在那里可以定义jvm参数-->
                                 <vmArg>-Djava.net.preferIPv4Stack=true</vmArg>

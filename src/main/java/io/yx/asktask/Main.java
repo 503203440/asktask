@@ -73,9 +73,8 @@ public class Main {
         popupMenu.setFont(new Font("微软雅黑", Font.PLAIN, 20));
 
 
-        TrayIcon trayIcon = new TrayIcon(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/fly.png"))).getImage(), "接口监控运行中");
-        trayIcon.setImageAutoSize(true);
-        trayIcon.setPopupMenu(popupMenu);
+        MyTrayIcon trayIcon = MyTrayIcon.getInstance(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/fly.png"))).getImage(),
+                80, 40, "接口监控系统");
 
         final SystemTray systemTray = SystemTray.getSystemTray();
         systemTray.add(trayIcon);

@@ -2,6 +2,7 @@ package io.yx.asktask;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -49,7 +50,9 @@ public class MyTrayIcon extends TrayIcon {
         // 退出按钮
         JButton exitBtn = new JButton("退出");
         exitBtn.setFont(defaultFont);
-        exitBtn.setForeground(Color.decode("#9b59b6"));
+        exitBtn.setBorder(new EmptyBorder(0,0,0,0));
+        exitBtn.setBackground(Color.decode("#ffffff"));
+        exitBtn.setForeground(Color.decode("#2f3542"));
         exitBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -63,9 +66,8 @@ public class MyTrayIcon extends TrayIcon {
 
 
         // 面板设置背景色
-//        jPanel.setBackground(Color.getColor("#9b59b6"));
+        jPanel.setBackground(Color.decode("#ffffff"));
         // 面板设置边框颜色
-        jPanel.setBorder(new LineBorder(Color.gray, 1));
         jDialog.add(jPanel);
 //        jDialog.setOpacity(0.8f);
 
@@ -85,17 +87,17 @@ public class MyTrayIcon extends TrayIcon {
         myTrayIcon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-
                 if (e.getButton() == 3) {
-                    int eX = e.getX();
-                    int eY = e.getY();
-                    // 获取缩放比例下的坐标位置
-                    int eXLocation = (int) (eX / finalRatio);
-                    int eYLocation = (int) (eY / finalRatio);
-                    // 右键
-                    jDialog.setLocation(eXLocation, eYLocation - jDialog.getHeight());
-                    jDialog.setVisible(true);
+                    SwingUtilities.invokeLater(() -> {
+                        int eX = e.getX();
+                        int eY = e.getY();
+                        // 获取缩放比例下的坐标位置
+                        int eXLocation = (int) (eX / finalRatio);
+                        int eYLocation = (int) (eY / finalRatio);
+                        // 右键
+                        jDialog.setLocation(eXLocation, eYLocation - jDialog.getHeight());
+                        jDialog.setVisible(true);
+                    });
                 }
             }
         });

@@ -21,8 +21,14 @@ echo %~dp0target\%MAIN_JAR_NAME%
 copy %~dp0target\%MAIN_JAR_NAME%  %sourceFolder%
 
 REM 调用jdeps --print-module-deps --ignore-missing-deps %~dp0target\%MAIN_JAR_NAME%并将结果赋值给modules
-for /f %%i in ('call jdeps --print-module-deps --ignore-missing-deps %~dp0target\%MAIN_JAR_NAME%') do set modules=%%i
+REM
+REM
+REM
+REM
 
+REM for /f %%i in ('call jdeps --print-module-deps --ignore-missing-deps %~dp0target\%MAIN_JAR_NAME%') do set modules=%%i
+
+set modules=java.base,java.compiler,java.desktop,java.management,java.naming,java.rmi,java.scripting,java.sql,jdk.httpserver,java.sql,java.security.sasl,java.security.jgss,java.xml.crypto,jdk.charsets,jdk.crypto.cryptoki,jdk.crypto.ec,jdk.crypto.mscapi
 echo %modules%
 
 jpackage.exe --type app-image -i "%sourceFolder%" -n asktask --java-options "--enable-preview -XX:+UseZGC -Xmx100m" --main-jar %MAIN_JAR_NAME% --icon %iconFilePath% --add-modules %modules% -d "%~dp0%target"

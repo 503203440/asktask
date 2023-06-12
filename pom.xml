@@ -9,8 +9,8 @@
     <version>1.0</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>20</maven.compiler.source>
+        <maven.compiler.target>20</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.10</version>
+            <version>5.8.11</version>
         </dependency>
 
         <dependency>
@@ -68,39 +68,54 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>io.github.fvarrui</groupId>
-                <artifactId>javapackager</artifactId>
-                <version>1.6.7</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <artifact>*</artifact>
+                            <excludes>
+                                <!--排除这些文件，否则会出现无法验证签名导致jar启动失败-->
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>package</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <!-- mandatory -->
-                            <mainClass>io.yx.asktask.Main</mainClass>
-                            <assetsDir>${project.basedir}/src/main/resources</assetsDir>
-                            <!-- optional -->
-                            <bundleJre>true</bundleJre>
-                            <customizedJre>true</customizedJre>
-                            <additionalModules>
-                                <!--如果不加入此模块则会出现Received fatal alert,SSL加解密需要-->
-                                <additionalModule>jdk.crypto.ec</additionalModule>
-                            </additionalModules>
-                            <additionalResources>
-                                <additionalResource>${project.basedir}/src/main/resources/asktask.l4j.ini</additionalResource>
-                            </additionalResources>
-                            <generateInstaller>false</generateInstaller>
-                            <administratorRequired>false</administratorRequired>
-                            <platform>windows</platform>
-                            <vmArgs>
-                                <!--这里的所有参数都可以放到.l4j.ini文件中,在那里可以定义jvm参数-->
-                                <vmArg>-Djava.net.preferIPv4Stack=true</vmArg>
-                            </vmArgs>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>io.yx.asktask.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                            <outputFile>
+                                ${project.build.directory}/${project.artifactId}-run.jar
+                            </outputFile>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <!--使用java20,开启预览选项enable-preview-->
+                    <source>20</source>
+                    <target>20</target>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -181,8 +181,8 @@ public class Main {
 
         // 有多少个url就需要启动多少个线程
         for (String url : urls) {
-            Thread thread = new Thread(() -> runner(url));
-            thread.start();
+//            Thread thread = new Thread(() -> runner(url));
+            Thread.startVirtualThread(() -> runner(url));
         }
 
     }
@@ -206,7 +206,10 @@ public class Main {
      */
     public static void execHttp(String url) {
         try {
-            try (Response response = okHttpClient.newCall(new Request.Builder().url(url).build()).execute()) {
+            Request request = new Request.Builder()
+                    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0")
+                    .url(url).build();
+            try (Response response = okHttpClient.newCall(request).execute()) {
                 int status = response.code();
                 String body = response.body().string();
                 if (status != 200) {

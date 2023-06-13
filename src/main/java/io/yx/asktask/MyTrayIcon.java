@@ -1,6 +1,9 @@
 package io.yx.asktask;
 
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -9,7 +12,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.Objects;
+
+import static io.yx.asktask.Main.userDir;
 
 /**
  * @author YX
@@ -17,6 +23,7 @@ import java.util.Objects;
  */
 public class MyTrayIcon extends TrayIcon {
 
+    private static final Log log = LogFactory.get(MyTrayIcon.class);
     private static final Font defaultFont = new Font("微软雅黑", Font.BOLD, 15);
 
     static {
@@ -45,12 +52,13 @@ public class MyTrayIcon extends TrayIcon {
         });
 
         JPanel jPanel = new JPanel();
-        jPanel.setLayout(new BorderLayout());
+        jPanel.setLayout(new GridLayout(2, 1, 0, 5));
+        jPanel.setSize(new Dimension(80, 80));
 
         // 退出按钮
         JButton exitBtn = new JButton("退出");
         exitBtn.setFont(defaultFont);
-        exitBtn.setBorder(new EmptyBorder(0,0,0,0));
+        exitBtn.setBorder(new EmptyBorder(0, 0, 2, 0));
         exitBtn.setBackground(Color.decode("#ffffff"));
         exitBtn.setForeground(Color.decode("#2f3542"));
         exitBtn.addMouseListener(new MouseAdapter() {
@@ -62,7 +70,33 @@ public class MyTrayIcon extends TrayIcon {
                 }
             }
         });
+
+        JButton reloadBtn = new JButton("重启应用");
+        reloadBtn.setFont(defaultFont);
+        reloadBtn.setBorder(new EmptyBorder(0, 0, 0, 0));
+        reloadBtn.setBackground(Color.decode("#ffffff"));
+        reloadBtn.setForeground(Color.decode("#2f3542"));
+        reloadBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // 无需确认直接重启
+                // 使用jpackager打包的应用,有一个jvm参数为jpackage.app-path,就是应用程序执行的路径
+                String appCommandLine = System.getProperty("jpackage.app-path");
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    ProcessBuilder processBuilder = new ProcessBuilder(appCommandLine);
+                    try {
+                        processBuilder.start();
+                        log.info("已执行重启操作!");
+                    } catch (IOException ex) {
+                        log.error("重启失败!", ex);
+                    }
+                }));
+                System.exit(1);
+            }
+        });
+
         jPanel.add(exitBtn);
+        jPanel.add(reloadBtn);
 
 
         // 面板设置背景色

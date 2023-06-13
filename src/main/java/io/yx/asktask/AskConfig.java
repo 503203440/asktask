@@ -9,31 +9,31 @@ import java.util.List;
 //@Data
 //@AllArgsConstructor
 public class AskConfig {
-    private Long ScanningInterval;// 时间间隔毫秒
-    private Integer ConnectionTimeOut;// http请求超时毫秒
+    private long ScanningInterval;// 时间间隔毫秒
+    private int ConnectionTimeOut;// http请求超时毫秒
     private String LocalFolderError;//错误文件存放文件夹
     private List<String> Url;//访问的url
 
-    public AskConfig(Long scanningInterval, Integer connectionTimeOut, String localFolderError, List<String> url) {
+    public AskConfig(long scanningInterval, int connectionTimeOut, String localFolderError, List<String> url) {
         ScanningInterval = scanningInterval;
         ConnectionTimeOut = connectionTimeOut;
         LocalFolderError = localFolderError;
         Url = url;
     }
 
-    public Long getScanningInterval() {
+    public long getScanningInterval() {
         return ScanningInterval;
     }
 
-    public void setScanningInterval(Long scanningInterval) {
+    public void setScanningInterval(long scanningInterval) {
         ScanningInterval = scanningInterval;
     }
 
-    public Integer getConnectionTimeOut() {
+    public int getConnectionTimeOut() {
         return ConnectionTimeOut;
     }
 
-    public void setConnectionTimeOut(Integer connectionTimeOut) {
+    public void setConnectionTimeOut(int connectionTimeOut) {
         ConnectionTimeOut = connectionTimeOut;
     }
 

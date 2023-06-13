@@ -74,7 +74,7 @@ public class Main {
 
 
         MyTrayIcon trayIcon = MyTrayIcon.getInstance(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/fly.png"))).getImage(),
-                80, 40, "接口监控系统");
+                80, 80, "接口监控系统");
 
         final SystemTray systemTray = SystemTray.getSystemTray();
         systemTray.add(trayIcon);

@@ -31,4 +31,4 @@ REM for /f %%i in ('call jdeps --print-module-deps --ignore-missing-deps %~dp0ta
 set modules=java.base,java.compiler,java.desktop,java.management,java.naming,java.rmi,java.scripting,java.sql,jdk.httpserver,java.sql,java.security.sasl,java.security.jgss,java.xml.crypto,jdk.charsets,jdk.crypto.cryptoki,jdk.crypto.ec,jdk.crypto.mscapi
 echo %modules%
 
-jpackage.exe --type app-image -i "%sourceFolder%" -n asktask --java-options "--enable-preview -XX:+UseZGC -Xmx100m" --main-jar %MAIN_JAR_NAME% --icon %iconFilePath% --add-modules %modules% -d "%~dp0%target"
+jpackage.exe --type app-image -i "%sourceFolder%" -n asktask --java-options "--enable-preview -Djava.net.preferIPv4Stack=true -XX:+UseZGC -Xmx100m" --main-jar %MAIN_JAR_NAME% --icon %iconFilePath% --add-modules %modules% -d "%~dp0%target"

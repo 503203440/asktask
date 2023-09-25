@@ -1,9 +1,9 @@
 @echo off
 
-set JAVA_HOME=D:\software\jdk\openjdk-20.0.1_windows-x64_bin\jdk-20.0.1
+set JAVA_HOME=C:\software\jdk\openjdk-21_windows-x64_bin\jdk-21
 set PATH=%JAVA_HOME%/bin;%PATH%
 
-set MAVEN_HOME=D:/software/Maven/apache-maven-3.8.3
+set MAVEN_HOME=C:/software/maven/apache-maven-3.9.4
 set PATH=%MAVEN_HOME%\bin;%PATH%
 
 call mvn clean package -DskipTests=true

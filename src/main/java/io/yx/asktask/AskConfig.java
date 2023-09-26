@@ -1,6 +1,6 @@
 package io.yx.asktask;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author YX
@@ -12,9 +12,9 @@ public class AskConfig {
     private long ScanningInterval;// 时间间隔毫秒
     private int ConnectionTimeOut;// http请求超时毫秒
     private String LocalFolderError;//错误文件存放文件夹
-    private List<String> Url;//访问的url
+    private Set<String> Url;//访问的url
 
-    public AskConfig(long scanningInterval, int connectionTimeOut, String localFolderError, List<String> url) {
+    public AskConfig(long scanningInterval, int connectionTimeOut, String localFolderError, Set<String> url) {
         ScanningInterval = scanningInterval;
         ConnectionTimeOut = connectionTimeOut;
         LocalFolderError = localFolderError;
@@ -45,11 +45,11 @@ public class AskConfig {
         LocalFolderError = localFolderError;
     }
 
-    public List<String> getUrl() {
+    public Set<String> getUrl() {
         return Url;
     }
 
-    public void setUrl(List<String> url) {
+    public void setUrl(Set<String> url) {
         Url = url;
     }
 }

@@ -128,7 +128,7 @@ public class Main {
         long ScanningInterval = 1000L;// 默认时间间隔
         int ConnectionTimeOut = 8000;//默认超时时间
         String LocalFolderError = "D:/error";//默认错误文件日志目录
-        List<String> Url = new ArrayList<>();// 访问的url目录
+        Set<String> Url = new HashSet<>();// 访问的url目录
 
 
         for (String line : lines) {
@@ -177,7 +177,7 @@ public class Main {
      * 启动任务
      */
     public static void startTask(AskConfig askConfig) {
-        final List<String> urls = askConfig.getUrl();
+        final Set<String> urls = askConfig.getUrl();
 
         // 有多少个url就需要启动多少个线程
         for (String url : urls) {
@@ -211,8 +211,8 @@ public class Main {
                     .url(url).build();
             try (Response response = okHttpClient.newCall(request).execute()) {
                 int status = response.code();
-                String body = response.body().string();
                 if (status != 200) {
+                    String body = response.body().string();
                     String format = String.format("DATETIME：%s,http状态错误HTTP_STATUS:%s,URL:%s,BODY:%s", DateUtil.now(), status, url, body);
                     log(format, DateUtil.format(new Date(), "yyyyMMddHH"));
                 }

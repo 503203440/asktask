@@ -22,8 +22,10 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Timer;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author YX
@@ -33,11 +35,10 @@ import java.util.*;
 public class Main {
 
     private static final Log log = LogFactory.get(Main.class);
-
     public static final String userDir = System.getProperty("user.dir");
     public static AskConfig askConfig;
-
     private static final OkHttpClient okHttpClient = new OkHttpClient();
+    private static final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(RuntimeUtil.getProcessorCount());
 
 
     static {
@@ -189,14 +190,8 @@ public class Main {
 
     public static void runner(String url) {
         execHttp(url);
-        Timer timer = new Timer(false);
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                runner(url);
-            }
-        };
-        timer.schedule(timerTask, askConfig.getScanningInterval());
+        // 执行一次http请求得到响应后,再次定时执行
+        scheduledExecutorService.schedule(() -> runner(url), askConfig.getScanningInterval(), TimeUnit.MILLISECONDS);
     }
 
 

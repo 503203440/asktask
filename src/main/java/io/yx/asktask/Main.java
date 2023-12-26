@@ -89,6 +89,7 @@ public class Main {
         trayIcon.displayMessage("askTask", msg, TrayIcon.MessageType.INFO);
         trayIcon.addActionListener(e -> {
             // 用户点击了消息
+            log.info("trayIcon触发Action操作:{}", e.paramString());
             // 打开文件夹
             try {
                 Desktop.getDesktop().browse(new URI("file:///" + askConfig.getLocalFolderError().replaceAll("\\\\", "/")));

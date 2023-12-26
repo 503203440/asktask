@@ -36,7 +36,7 @@ public class MyTrayIcon extends TrayIcon {
         setImageAutoSize(true);
     }
 
-    public static final MyTrayIcon getInstance(Image imageIcon, int width, int height, String tooltip) {
+    public static MyTrayIcon getInstance(Image imageIcon, int width, int height, String tooltip) {
         JDialog jDialog = new JDialog();
         // 无边框
         jDialog.setUndecorated(true);
@@ -122,6 +122,7 @@ public class MyTrayIcon extends TrayIcon {
         myTrayIcon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                log.info("button被点击了,button:{}", e.getButton());
                 if (e.getButton() == 3) {
                     ThreadUtil.execute(() -> {
                         int eX = e.getX();

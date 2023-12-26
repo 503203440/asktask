@@ -1,5 +1,6 @@
 package io.yx.asktask;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -122,7 +123,7 @@ public class MyTrayIcon extends TrayIcon {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 3) {
-                    SwingUtilities.invokeLater(() -> {
+                    ThreadUtil.execute(() -> {
                         int eX = e.getX();
                         int eY = e.getY();
                         // 获取缩放比例下的坐标位置

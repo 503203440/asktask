@@ -1,6 +1,6 @@
 @echo off
 
-set JAVA_HOME=C:\software\jdk\openjdk-21_windows-x64_bin\jdk-21
+set JAVA_HOME=C:\software\jdk\zulu21.30.15-ca-jdk21.0.1-win_x64
 set PATH=%JAVA_HOME%/bin;%PATH%
 
 set MAVEN_HOME=C:/software/maven/apache-maven-3.9.4
